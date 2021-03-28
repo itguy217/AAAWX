@@ -5,4 +5,4 @@ I felt compiled to answer this call.
 Weather measuring instruments:
 Argent's Wind / Rain Sensor Assembly, Located at https://www.argentdata.com/catalog/index.php?cPath=29
 Adufruit's BME280 sensor.
-Arduino Nano 33 IoT
+Arduino Nano 33 IoT, use 5 volts
