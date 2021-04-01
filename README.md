@@ -11,6 +11,7 @@ Weather measuring instruments:
 [Arduino Nano 33 IoT, uses 5 volts]**
 
 The php and the css files go into your Apache /var/www/html folder
+
 **add.php is a required file as it is the main driverfor sending the sensor data to the database and weather underground.**
 
 ***Adminer is a Compact Database Management system, if you don't want to use a full feature program like MYSQL Bench or MYSQL Manager.***
