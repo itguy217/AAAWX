@@ -2,6 +2,8 @@
 I found there was no weather stations setup with this Arduino Nano 33 IoT that was setup for sending sensor data to a MYSQL server and Weather Underground. 
 I felt compiled to answer this call.
 
+Setup your own weather station page with Weather Underground at: https://www.wunderground.com/pws/overview
+
 The .ino file references some libraries that you may need to update and if you get the AVR error, you will need to google search on how to fix the config to allow the library to function without error. It literally is a line where you need to add the nano 33 Iot to it.
 
 **Requirements: A server that is a hardware server or a Virtual Machine (VM) with LAMP - Linux Apache MySQL PHP.
