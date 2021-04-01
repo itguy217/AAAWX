@@ -9,4 +9,4 @@ Weather measuring instruments:
 [Arduino Nano 33 IoT, use 5 volts]
 The php and the css files go into your Apache www/html folder***
 
-***Adminer is a Compact Database Management file if you don't want to use a full feature program.***
+***Adminer is a Compact Database Management system, if you don't want to use a full feature program like MYSQL Bench or MYSQL Manager.***
