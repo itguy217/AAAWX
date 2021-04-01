@@ -8,3 +8,5 @@ Weather measuring instruments:
 [Adufruit's BME280 sensor].
 [Arduino Nano 33 IoT, use 5 volts]
 The php and the css files go into your Apache www/html folder***
+
+***Adminer is a Compact Database Management file if you don't want to use a full feature program.***
