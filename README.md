@@ -1,5 +1,5 @@
 # AAAWX
-I found there was no weather stations setup with this arduino Nano 33 IoT that was setup for sending sensor data to a MYSQL server and Weather Underground. 
+I found there was no weather stations setup with this Arduino Nano 33 IoT that was setup for sending sensor data to a MYSQL server and Weather Underground. 
 I felt compiled to answer this call.
 
 ***Requirements: A server that is a hardware server or a Virtual Machine (VM) with LAMP - Linux Apache MySQL PHP. ***
