@@ -8,10 +8,12 @@
 **
 **	Arduino Code for: NANO 33 IoT
 **	Adafruit Industries BME280 Humidity, Temperature & Pressure Sensor -- Nano 33 Iot Pinout: SDA - A4/D18    SCL - A5/D19
+**	Adafruit Industries GUVA Analog UV Light Sensor					   -- Nano 33 Iot Pinout: D5
 **
 **	Argent Data Systems Weather Station (Anemometer, Wind Vane and Rain Gauge) -- Nano 33 Iot Pinout: A=A7 WV=A6 RG=A3
 **	The anemometer and the rain gauge each require a digital input pin that can be used as an interrupt
 **	The wind vane requires an analog input pin.
+**
 **
  *************************************************************************************************************************/
 #include <WiFiNINA.h>
@@ -22,7 +24,6 @@
 #include <ADSWeather.h>
 
 Adafruit_BME280 bme; // I2C
-#define SEALEVELPRESSURE_HPA (1013.25)
 
 #define ANEMOMETER_PIN A7
 #define VANE_PIN A6
@@ -30,8 +31,8 @@ Adafruit_BME280 bme; // I2C
 
 #define CALC_INTERVAL 1000
 
-char ssid[] = "xxxx";  // Your wireless network name
-char password[] = "xxxxx"; // Your wireless password
+char ssid[] = "xxx";  // wireless network name
+char password[] = "xxxx"; // wireless password
 int status = WL_IDLE_STATUS;
 WiFiClient client;
 
@@ -57,7 +58,6 @@ float t;
 float h;
 float dew;
 float pres;
-float altp;
 float r;
 int uv;
 
@@ -142,10 +142,6 @@ void loop() {
   Serial.print(bme.readPressure() / 3386.39);
   Serial.println(" in.");
 
-  Serial.print("\nApprox. Altitude = ");
-  Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA) * 3.2808);
-  Serial.println(" Ft");
-
   Serial.print("\nHumidity = ");
   Serial.print(bme.readHumidity());
   Serial.println(" %");
@@ -169,8 +165,11 @@ void loop() {
     nextCalc = timer + CALC_INTERVAL;
     rainAmmount = ws1.getRain();
     windSpeed = ws1.getWindSpeed();
+    //windDirection = ws1.getWindDirection();
     windGust = ws1.getWindGust();
 
+    //     windSpeed / 10 will give the interger component of the wind speed
+    //     windSpeed % 10 will give the fractional component of the wind speed
     windSpeed1 = (windSpeed / 10) + String(".") + (windSpeed % 10);
     windGust1 = (windGust / 10) + String(".") + (windGust % 10);
 
@@ -204,15 +203,14 @@ void loop() {
   h = (float) bme.readHumidity();
   t = (float) bme.readTemperature() * 1.8 + 32;
   pres = (float) (bme.readPressure() / 3386.39 );
-  altp = (float) bme.readAltitude(SEALEVELPRESSURE_HPA) * 3.2808;
 
   r = (float) rainAmmount / 1000;
   dew = (float) (t - ((100 - h) * .36));
   uv = (int) 0;
 
-  wdata = String("temp1=") + t + String( "&hum1=") + h + String( "&dew1=") + dew + String("&pres1=") + pres + String("&alt1=") + altp + String("&windS1=") + windSpeed1 + String("&windD1=") + angle + String("&windG1=") + windGust1 + String("&HRain1=") + r + String("&uv1=") + uv;
+  wdata = String("temp1=") + t + String( "&hum1=") + h + String( "&dew1=") + dew + String("&pres1=") + pres + String("&windS1=") + windSpeed1 + String("&windD1=") + angle + String("&windG1=") + windGust1 + String("&HRain1=") + r + String("&uv1=") + uv;
 
-  if (client.connect("192.168.1.141", 80)) {
+  if (client.connect("xxx.xxx.xxx.xxx", 80)) { //Change IP Address to your server IP Address
     // Connect to SQL server
     Serial.println("connected...Sending data...");
     client.println("POST /add.php? HTTP/1.1");
@@ -235,5 +233,5 @@ void loop() {
     Serial.println("**********************>\n");
   }
 
-  delay(3000); // WAIT THREE SECONDS BEFORE SENDING AGAIN
+  delay(10000); // WAIT TEN SECONDS BEFORE SENDING AGAIN
 }
