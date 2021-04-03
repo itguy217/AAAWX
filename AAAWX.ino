@@ -32,7 +32,7 @@ Adafruit_BME280 bme; // I2C
 #define CALC_INTERVAL 1000
 
 char ssid[] = "xxx";  // wireless network name
-char password[] = "xxxx"; // wireless password
+char password[] = "xxxx$"; // wireless password
 int status = WL_IDLE_STATUS;
 WiFiClient client;
 
@@ -65,21 +65,31 @@ ADSWeather ws1(RAIN_PIN, VANE_PIN, ANEMOMETER_PIN); //This should configure all 
 
 String wdata = "";
 
+
+
 /*************************************/
 void setup() {
   Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(RAIN_PIN), ws1.countRain, FALLING); //ws1.countRain is the ISR for the rain gauge.
-  attachInterrupt(digitalPinToInterrupt(ANEMOMETER_PIN), ws1.countAnemometer, FALLING); //ws1.countAnemometer is the ISR for the anemometer.
-  nextCalc = millis() + CALC_INTERVAL;
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true);
+  }
 
-  while (!Serial);   // time to get serial running
+  connectToAP();    // Connect to Wifi Access Point
+  //printWifiStatus();
+
+  //while (!Serial);   // time to get serial running...When ready to run without the USB...comment this line out.
   Serial.println(F("BME280 test"));
 
   unsigned status;
 
   // default settings
   status = bme.begin();
+
   if (!status) {
     Serial.println("Could not find a valid BME280 sensor, check wiring, address, sensor ID!");
     Serial.print("SensorID was: 0x");
@@ -91,21 +101,12 @@ void setup() {
     while (1) delay(3);
   }
 
-  Serial.println("-- Default Test --");
-  delayTime = 2000;
+  attachInterrupt(digitalPinToInterrupt(RAIN_PIN), ws1.countRain, FALLING); //ws1.countRain is the ISR for the rain gauge.
+  attachInterrupt(digitalPinToInterrupt(ANEMOMETER_PIN), ws1.countAnemometer, FALLING); //ws1.countAnemometer is the ISR for the anemometer.
+  nextCalc = millis() + CALC_INTERVAL;
 
-  Serial.println();
-
-  // check for the WiFi module:
-  if (WiFi.status() == WL_NO_MODULE) {
-    Serial.println("Communication with WiFi module failed!");
-    // don't continue
-    while (true);
-  }
-
-  connectToAP();    // Connect to Wifi Access Point
-  printWifiStatus();
 }
+
 /*****************************************************************/
 void printWifiStatus() {
   Serial.print("SSID: ");
@@ -125,14 +126,24 @@ void connectToAP() {
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, password);
 
+    digitalWrite(LED_BUILTIN, HIGH);
     // wait 1 second for connection:
     delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, HIGH);
+    // wait 1 second for connection:
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
   }
   Serial.println("Connected...");
+  delay(1000);                       // wait for a second
+
 }
 
 /***************************************************/
 void loop() {
+
   Serial.print("\nTemperature = ");
   Serial.print(bme.readTemperature() * 1.8 + 32);
   Serial.println(" F");
@@ -199,6 +210,9 @@ void loop() {
 
 
   //***Send weather DATA ***
+  digitalWrite(LED_BUILTIN, HIGH);
+  // wait 1 second for connection:
+  delay(1000);
 
   h = (float) bme.readHumidity();
   t = (float) bme.readTemperature() * 1.8 + 32;
@@ -232,6 +246,7 @@ void loop() {
     Serial.println("DONE!");
     Serial.println("**********************>\n");
   }
-
-  delay(10000); // WAIT TEN SECONDS BEFORE SENDING AGAIN
+  delay(1000);                       // wait for one second
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(10000); // WAIT A TOTAL OF TEN SECONDS BEFORE SENDING AGAIN
 }
