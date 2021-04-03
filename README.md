@@ -17,4 +17,4 @@ The php and the css files go into your Apache **/var/www/html** folder
 **add.php is a required file as it is the main driver for sending the sensor data to the database and weather underground.**
 
 ***Adminer is a Compact Database Management system, if you don't want to use a full feature program like MYSQL Bench or MYSQL Manager.***
-***WHEN you are ready to deploy this out in the field, you MUST comment out near line 85 where it typed as **while (!Serial);**  ***
+***WHEN you are ready to deploy this out in the field, you MUST comment out near line 85 where it typed as **while (!Serial);** If you don't comment it out , it will only run with the serial monitor open and the USB connected. ***
