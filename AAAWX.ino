@@ -82,7 +82,6 @@ void setup() {
   connectToAP();    // Connect to Wifi Access Point
   //printWifiStatus();
 
-  //while (!Serial);   // time to get serial running...When ready to run without the USB...comment this line out.
   Serial.println(F("BME280 test"));
 
   unsigned status;
@@ -176,13 +175,13 @@ void loop() {
     nextCalc = timer + CALC_INTERVAL;
     rainAmmount = ws1.getRain();
     windSpeed = ws1.getWindSpeed();
-    //windDirection = ws1.getWindDirection();
+    windDirection = ws1.getWindDirection();
     windGust = ws1.getWindGust();
 
     //     windSpeed / 10 will give the interger component of the wind speed
     //     windSpeed % 10 will give the fractional component of the wind speed
-    windSpeed1 = (windSpeed / 10) + String(".") + (windSpeed % 10);
-    windGust1 = (windGust / 10) + String(".") + (windGust % 10);
+    windSpeed1 = (windSpeed / 100) + String(".") + (windSpeed % 10);
+    windGust1 = (windGust / 100) + String(".") + (windGust % 10);
 
     Serial.print("\nWind speed: ");
     Serial.print(windSpeed1);
@@ -216,7 +215,7 @@ void loop() {
 
   h = (float) bme.readHumidity();
   t = (float) bme.readTemperature() * 1.8 + 32;
-  pres = (float) (bme.readPressure() / 3386.39 );
+  pres = (float) ((bme.readPressure() / 3386.39) + 1.00) ;
 
   r = (float) rainAmmount / 1000;
   dew = (float) (t - ((100 - h) * .36));
